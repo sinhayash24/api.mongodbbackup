@@ -15,10 +15,12 @@ def perform_backup():
             "mongo",
             "mongodump",
             "--host=localhost:27017",
-            f"--out=/backups/{backup_name}"
+            f"--out=/backups/{backup_name}",
             "--gzip"
         ],
-        check=True
+        check=True,
+        capture_output=True,
+        text=True
     )
 
     subprocess.run(
