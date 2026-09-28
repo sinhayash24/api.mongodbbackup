@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: mongodb-backup-api
+    ports:
+      - "5001:5001"
+    volumes:
+      # Required because the API invokes `docker exec` and `docker cp`.
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
