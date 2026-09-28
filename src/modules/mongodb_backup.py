@@ -12,7 +12,7 @@ def perform_backup():
         [
             "docker",
             "exec",
-            "mongo",
+            mongo_config.container_name,
             "mongodump",
             "--host=localhost:27017",
             f"--out=/backups/{backup_name}",
@@ -39,7 +39,7 @@ def perform_backup():
     }
 
 
-def register_routes(app):
+def register_routes(app, key_vault_config):
 
     @app.route("/backup", methods=["POST"])
     def backup():
@@ -53,3 +53,4 @@ def register_routes(app):
                 "status": "error",
                 "error": str(ex),
             }), 500
+
