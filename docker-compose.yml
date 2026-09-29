@@ -7,6 +7,6 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      # Required because the API invokes `docker exec` and `docker cp`.
-      - /var/run/docker.sock:/var/run/docker.sock
+  - /var/run/docker.sock:/var/run/docker.sock
+  - /home/azureuser/mongo-backups:/backups
     restart: unless-stopped

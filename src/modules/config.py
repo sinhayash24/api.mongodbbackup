@@ -43,12 +43,25 @@ class MongoInstanceConfig:
             if not mongo_instance_id:
                 raise ValueError("Mongo instance ID is required.")
             connection_string_secret_name = f"{mongo_instance_id}-connection-string"
-
             container_name_secret_name = f"{mongo_instance_id}-container-name"
+            db_names_secret_name = f"{mongo_instance_id}-dbname"
 
-            self.connection_string = (key_vault_config.get_secret(connection_string_secret_name))
+            self.connection_string = key_vault_config.get_secret(
+                connection_string_secret_name
+            )
+            self.container_name = key_vault_config.get_secret(
+                container_name_secret_name
+            )
+            self.db_names = tuple(
+                name.strip()
+                for name in key_vault_config.get_secret(db_names_secret_name).split(",")
+                if name.strip()
+            )
 
-            self.container_name = (key_vault_config.get_secret(container_name_secret_name))
+            if not self.db_names:
+                raise ValueError(
+                    f"Key Vault secret '{db_names_secret_name}' contains no database names."
+                )
 
         except Exception as errString:
             print(f"EFailed to load MongoDB configuration for instance" f" '{mongo_instance_id}'\n{errString}")
@@ -56,5 +69,3 @@ class MongoInstanceConfig:
 
         else:
             print(f"MongoDB configuration for instance '{mongo_instance_id}' loaded successfully.")
-
-        

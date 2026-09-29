@@ -5,7 +5,7 @@ config = Config()
 key_vault_config = KeyVaultConfig(config.vault_url)
 
 app = Flask(__name__)
-register_routes(app, key_vault_config)
+register_routes(app, key_vault_config, config.backup_path)
 
 
 if __name__ == '__main__':
